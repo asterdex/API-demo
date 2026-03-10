@@ -6,7 +6,7 @@
 const axios = require('axios');
 const config = require('./config');
 
-const params = {};
+const params = {"symbol": "BTCUSDT"};
 
 async function leverageBracket() {
     try {

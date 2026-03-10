@@ -7,7 +7,7 @@ const axios = require('axios');
 const config = require('./config');
 
 const params = {
-    "symbol": "BTCUSDT",
+    "symbol": "ZECUSDT",
     "limit": 10
 };
 
