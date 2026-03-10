@@ -44,10 +44,10 @@ async function signParamsWeb3(params, userAddress, signerAddress, privateKey, re
         allParams.user = userAddress;
         allParams.signer = signerAddress;
         
-        // Step 3: Build query string (key=value&key=value format) / 构建查询字符串
-        const queryString = buildQueryString(allParams);
+        // Step 3: Build RAW query string for signing (NO URL encoding!) / 构建原始查询字符串用于签名（不进行URL编码！）
+        const rawQueryString = buildRawQueryString(allParams);
         
-        console.log('Step 1 - Query String / 查询字符串:', queryString);
+        console.log('Step 1 - Raw Query String (for signing) / 原始查询字符串（用于签名）:', rawQueryString);
         
         // Step 4: Setup EIP-712 domain (use config or parameter) / 设置EIP-712域（使用配置或参数）
         const domain = eip712Domain || config.EIP712_DOMAIN;
@@ -59,9 +59,9 @@ async function signParamsWeb3(params, userAddress, signerAddress, privateKey, re
             ]
         };
         
-        // Step 6: Define message value / 定义消息值
+        // Step 6: Define message value (use RAW string, matching Python demo) / 定义消息值（使用原始字符串，匹配Python demo）
         const value = {
-            msg: queryString
+            msg: rawQueryString
         };
         
         console.log('Step 2 - EIP-712 Domain / EIP-712域:', JSON.stringify(domain));
@@ -86,16 +86,38 @@ async function signParamsWeb3(params, userAddress, signerAddress, privateKey, re
 }
 
 /**
- * Build query string from parameters / 从参数构建查询字符串
+ * Build RAW query string from parameters (NO URL encoding) / 从参数构建原始查询字符串（不进行URL编码）
+ * Used for EIP-712 signature - must match Python's get_url() behavior
+ * 用于EIP-712签名 - 必须匹配Python的get_url()行为
+ */
+function buildRawQueryString(params) {
+    return Object.keys(params)
+        .filter(key => params[key] !== undefined && params[key] !== null)
+        .map(key => `${key}=${params[key]}`)
+        .join('&');
+}
+
+/**
+ * Build URL-encoded query string from parameters / 从参数构建URL编码的查询字符串
+ * Used for actual HTTP request / 用于实际的HTTP请求
  */
 function buildQueryString(params) {
     return Object.keys(params)
         .filter(key => params[key] !== undefined && params[key] !== null)
-        .map(key => `${key}=${encodeURIComponent(params[key])}`)
+        .map(key => {
+            const value = params[key];
+            // For batchOrders, manually encode single quotes as %27
+            // 对于 batchOrders，手动将单引号编码为 %27
+            if (key === 'batchOrders') {
+                return `${key}=${encodeURIComponent(value).replace(/'/g, '%27')}`;
+            }
+            return `${key}=${encodeURIComponent(value)}`;
+        })
         .join('&');
 }
 
 module.exports = {
     signParamsWeb3,
-    buildQueryString
+    buildQueryString,
+    buildRawQueryString
 };

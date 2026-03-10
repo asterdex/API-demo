@@ -6,8 +6,10 @@
 const axios = require('axios');
 const config = require('./config');
 
+// IMPORTANT: batchOrders must use SINGLE quotes, not double quotes
+// 重要：batchOrders 必须使用单引号，不能使用双引号
 const params = {
-    "batchOrders": "[]"
+    batchOrders: JSON.stringify([{"symbol":"ASTERUSDT","side":"BUY","type":"LIMIT","quantity":"0.001","price":"0.0100","timeInForce":"GTC"},{"symbol":"ASTERUSDT","side":"BUY","type":"LIMIT","quantity":"0.001","price":"0.0101","timeInForce":"GTC"}]).replace(/"/g, "'")
 };
 
 async function batchOrders() {
@@ -24,9 +26,12 @@ async function batchOrders() {
             config.RECV_WINDOW
         );
         const queryString = buildQueryString(signedParams);
+        
+        // IMPORTANT: Parameters must be in URL query string, not in body (matching Python demo)
+        // 重要：参数必须在 URL query string 中，不是在 body 中（匹配 Python demo）
         const response = await axios.post(
-            `${config.BASE_URL}/fapi/v3/batchOrders`,
-            queryString,
+            `${config.BASE_URL}/fapi/v3/batchOrders?${queryString}`,
+            '',  // Empty body / 空 body
             {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
