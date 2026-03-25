@@ -9,21 +9,40 @@ const { ethers } = require('ethers');
 const config = require('./config');
 
 /**
+ * Nonce generator: seconds * 1,000,000 + per-second counter
+ * 与文档 Python 示例 get_nonce() 逻辑完全一致，确保单调递增
+ * 
+ * nonce 必须为微秒级时间戳，且不能重复、不能早于服务端最近已处理的最小值
+ * 服务端校验：nonce 与系统时间偏差不得超过 ±5 秒
+ */
+let _lastSec = 0;
+let _counter = 0;
+
+function getNonce() {
+    const nowSec = Math.floor(Date.now() / 1000);
+    if (nowSec === _lastSec) {
+        _counter += 1;
+    } else {
+        _lastSec = nowSec;
+        _counter = 0;
+    }
+    return nowSec * 1_000_000 + _counter;
+}
+
+/**
  * Generate EIP-712 signature for Futures V3 API / 为期货V3 API生成EIP-712签名
  * 
  * @param {Object} params - API parameters / API参数
  * @param {string} userAddress - Main account wallet address / 主账户钱包地址
  * @param {string} signerAddress - API wallet address / API钱包地址
  * @param {string} privateKey - API wallet private key / API钱包私钥
- * @param {number} recvWindow - Receive window in milliseconds / 接收窗口（毫秒）
  * @param {Object} eip712Domain - Optional: EIP-712 domain override (defaults to config.EIP712_DOMAIN) / 可选：覆盖EIP-712域配置（默认使用config.EIP712_DOMAIN）
  * @returns {Object} - Signed parameters / 签名后的参数
  */
-async function signParamsWeb3(params, userAddress, signerAddress, privateKey, recvWindow = 5000, eip712Domain = null) {
+async function signParamsWeb3(params, userAddress, signerAddress, privateKey, eip712Domain = null) {
     try {
-        // Step 1: Generate nonce (microseconds with random) / 生成nonce（微秒 + 随机数）
-        const timestamp = Date.now();
-        const nonce = Math.floor(timestamp * 1000) + Math.floor(Math.random() * 1000000);
+        // Step 1: Generate nonce (microseconds, monotonically increasing) / 生成nonce（微秒，单调递增）
+        const nonce = getNonce();
         
         // Step 2: Build parameters object / 构建参数对象
         const allParams = {

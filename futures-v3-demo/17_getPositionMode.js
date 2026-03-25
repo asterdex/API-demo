@@ -28,8 +28,7 @@ async function getPositionMode() {
             params,
             config.USER_ADDRESS,
             config.SIGNER_ADDRESS,
-            config.PRIVATE_KEY,
-            config.RECV_WINDOW
+            config.PRIVATE_KEY
         );
         
         // Build query string / 构建查询字符串

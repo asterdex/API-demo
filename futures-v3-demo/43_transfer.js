@@ -23,8 +23,7 @@ async function transfer() {
             params,
             config.USER_ADDRESS,
             config.SIGNER_ADDRESS,
-            config.PRIVATE_KEY,
-            config.RECV_WINDOW
+            config.PRIVATE_KEY
         );
         const queryString = buildQueryString(signedParams);
         const fullUrl = `${config.BASE_URL}/fapi/v3/asset/wallet/transfer`;

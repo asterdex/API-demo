@@ -22,8 +22,7 @@ async function positionMargin() {
             params,
             config.USER_ADDRESS,
             config.SIGNER_ADDRESS,
-            config.PRIVATE_KEY,
-            config.RECV_WINDOW
+            config.PRIVATE_KEY
         );
         const queryString = buildQueryString(signedParams);
         const response = await axios.post(

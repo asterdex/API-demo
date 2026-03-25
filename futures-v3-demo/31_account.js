@@ -4,6 +4,8 @@
  */
 
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const config = require('./config');
 
 const params = {};
@@ -18,8 +20,7 @@ async function account() {
             params,
             config.USER_ADDRESS,
             config.SIGNER_ADDRESS,
-            config.PRIVATE_KEY,
-            config.RECV_WINDOW
+            config.PRIVATE_KEY
         );
         const queryString = buildQueryString(signedParams);
         const fullUrl = `${config.BASE_URL}/fapi/v3/account?${queryString}`;
@@ -27,6 +28,13 @@ async function account() {
         
         // Output raw response data / 输出原始响应数据
         console.log(JSON.stringify(response.data, null, 2));
+        
+        // Save to JSON file / 保存为 JSON 文件
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        const filename = `account_info_${timestamp}.json`;
+        const filepath = path.join(__dirname, filename);
+        fs.writeFileSync(filepath, JSON.stringify(response.data, null, 2), 'utf-8');
+        console.log(`\n✓ Saved to / 已保存至: ${filename}`);
         
         // Output request details / 输出请求详情
         console.log('\n--- Request Details / 请求详情 ---');

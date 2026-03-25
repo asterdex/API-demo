@@ -7,11 +7,11 @@ const axios = require('axios');
 const config = require('./config');
 
 const params = {
-    "symbol": "BTCUSDT",
+    "symbol": "TSLAUSDT",
     "side": "BUY",
     "type": "LIMIT",
-    "quantity": "0.001",
-    "price": "90000",
+    "quantity": "1",
+    "price": "380",
     "timeInForce": "HIDDEN"
 };
 
@@ -25,8 +25,7 @@ async function order() {
             params,
             config.USER_ADDRESS,
             config.SIGNER_ADDRESS,
-            config.PRIVATE_KEY,
-            config.RECV_WINDOW
+            config.PRIVATE_KEY
         );
         const queryString = buildQueryString(signedParams);
         const response = await axios.post(
