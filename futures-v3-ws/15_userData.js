@@ -14,10 +14,11 @@ const axios = require('axios');
 const path = require('path');
 
 /**
- * Load API configuration from futures-v3-demo
- * 从futures-v3-demo加载API配置
+ * Load config and utils from futures-v3-demo (EIP-712 auth required)
+ * 从 futures-v3-demo 加载配置和工具函数（需要 EIP-712 鉴权）
  */
 const futuresV3Config = require(path.join(__dirname, '../futures-v3-demo/config.js'));
+const { signParamsWeb3, buildQueryString } = require(path.join(__dirname, '../futures-v3-demo/utils.js'));
 
 /**
  * Configuration / 配置
@@ -28,17 +29,26 @@ const config = {
 };
 
 /**
- * Create listenKey automatically / 自动创建listenKey
+ * Create listenKey with EIP-712 authentication / 使用 EIP-712 鉴权创建 listenKey
  */
 async function createListenKey() {
     try {
-        console.log('Creating listenKey automatically... / 自动创建listenKey中...\n');
-        
+        console.log('Creating listenKey (EIP-712 auth)... / 创建 listenKey（EIP-712 鉴权）中...\n');
+
+        const signedParams = await signParamsWeb3(
+            {},
+            futuresV3Config.USER_ADDRESS,
+            futuresV3Config.SIGNER_ADDRESS,
+            futuresV3Config.PRIVATE_KEY
+        );
+        const queryString = buildQueryString(signedParams);
+
         const response = await axios.post(
             `${config.restApiUrl}/fapi/v3/listenKey`,
-            {}
+            queryString,
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
-        
+
         if (response.data && response.data.listenKey) {
             console.log('✓ ListenKey created successfully / ListenKey创建成功');
             console.log(`ListenKey: ${response.data.listenKey}\n`);
@@ -105,12 +115,20 @@ async function connectUserDataStream() {
             process.exit(0);
         });
         
-        // Keep listenKey alive every 30 minutes / 每30分钟保持listenKey活跃
+        // Keep listenKey alive every 30 minutes / 每30分钟保活 listenKey
         const keepAliveInterval = setInterval(async () => {
             try {
+                const signedParams = await signParamsWeb3(
+                    { listenKey },
+                    futuresV3Config.USER_ADDRESS,
+                    futuresV3Config.SIGNER_ADDRESS,
+                    futuresV3Config.PRIVATE_KEY
+                );
+                const qs = buildQueryString(signedParams);
                 await axios.put(
                     `${config.restApiUrl}/fapi/v3/listenKey`,
-                    {}
+                    qs,
+                    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
                 );
                 console.log('✓ ListenKey kept alive / ListenKey保持活跃');
             } catch (error) {
