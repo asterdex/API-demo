@@ -1,0 +1,9 @@
+{
+  "name": "spot-v3-demo",
+  "version": "1.0.0",
+  "description": "Spot V3 API Demo with EIP-712 Signature / 现货V3 API示例（EIP-712签名）",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "ethers": "^6.9.0"
+  }
+}

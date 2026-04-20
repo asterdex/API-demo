@@ -12,7 +12,7 @@ const params = {
     "positionSide": "LONG",
     "type": "LIMIT",
     "quantity": "0.01",
-    "price": "95000",
+    "price": "80000",
     "timeInForce": "HIDDEN"
 };
 

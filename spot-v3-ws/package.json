@@ -1,0 +1,24 @@
+{
+  "name": "spot-v3-ws-demo",
+  "version": "1.0.0",
+  "description": "Spot V3 WebSocket API Demo Examples / 现货V3 WebSocket API示例",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Run any example file with: node <filename>.js\" && echo \"使用以下命令运行任意示例文件：node <文件名>.js\""
+  },
+  "keywords": [
+    "spot",
+    "v3",
+    "websocket",
+    "api",
+    "trading",
+    "cryptocurrency"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.0",
+    "axios": "^1.6.0",
+    "ethers": "^6.0.0"
+  }
+}

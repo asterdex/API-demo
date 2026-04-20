@@ -20,7 +20,7 @@ const params = {
     symbol: 'ASTERUSDT',          // Trading pair / 交易对 (required / 必需)
     side: 'BUY',                // Order side / 订单方向 (required / 必需): BUY or SELL
     type: 'MARKET',              // Order type / 订单类型 (required / 必需): LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT
-    quantity: '200',            // Order quantity / 订单数量 (required / 必需)
+    quantity: '10',            // Order quantity / 订单数量 (required / 必需)
     // price: '300',               // Order price / 订单价格 (required for LIMIT orders / LIMIT订单必需)
     // timeInForce: 'GTC',         // Time in force / 有效方式: GTC, IOC, FOK (required for LIMIT orders / LIMIT订单必需)
     // newClientOrderId: 'my_order_123',  // Custom order ID / 自定义订单ID (optional / 可选)
