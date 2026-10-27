@@ -9,24 +9,24 @@ const { ethers } = require('ethers');
 const config = require('./config');
 
 /**
- * Nonce generator: seconds * 1,000,000 + per-second counter
- * 与文档 Python 示例 get_nonce() 逻辑完全一致，确保单调递增
- * 
- * nonce 必须为微秒级时间戳，且不能重复、不能早于服务端最近已处理的最小值
- * 服务端校验：nonce 与系统时间偏差不得超过 ±5 秒
+ * Nonce generator: microsecond timestamp, strictly increasing within the process
+ * Nonce 生成器：微秒级时间戳，进程内严格递增
+ *
+ * 文档：nonce 为当前时间戳（微秒），与服务器时间偏差不得超过 ±60 秒，且不可重复
+ * Docs: nonce is the current timestamp in microseconds, must be within ±60s of server time and never reused
+ *
+ * 使用毫秒级精度 * 1000，避免短时间内连续运行多个脚本时产生相同 nonce（Nonce used）
+ * Millisecond precision * 1000, so that scripts run back-to-back do not collide (avoids "Nonce used")
  */
-let _lastSec = 0;
-let _counter = 0;
+let _lastNonce = 0;
 
 function getNonce() {
-    const nowSec = Math.floor(Date.now() / 1000);
-    if (nowSec === _lastSec) {
-        _counter += 1;
-    } else {
-        _lastSec = nowSec;
-        _counter = 0;
+    let nonce = Date.now() * 1000;
+    if (nonce <= _lastNonce) {
+        nonce = _lastNonce + 1;
     }
-    return nowSec * 1_000_000 + _counter;
+    _lastNonce = nonce;
+    return nonce;
 }
 
 /**
