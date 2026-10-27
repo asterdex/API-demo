@@ -7,12 +7,12 @@ const axios = require('axios');
 const config = require('./config');
 
 const params = {
-    "symbol": "BTCUSDT",
+    "symbol": "ETHUSDT",
     "side": "BUY",
-    "type": "LIMIT",
-    "quantity": "0.001",
-    "price": "50000",
-    "timeInForce": "GTC"
+    "type": "MARKET",
+    "quantity": "0.005",
+    // "price": "50000",
+    // "timeInForce": "GTC"
 };
 
 async function placeOrder() {

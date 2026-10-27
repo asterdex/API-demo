@@ -19,7 +19,7 @@ async function updateAgent() {
         const params = {
             agentAddress: config.SIGNER_ADDRESS,
             // ipWhitelist: '',
-            canSpotTrade: false,
+            canSpotTrade: true,
             canPerpTrade: true,
             canWithdraw: false
         };

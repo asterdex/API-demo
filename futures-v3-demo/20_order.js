@@ -7,12 +7,12 @@ const axios = require('axios');
 const config = require('./config');
 
 const params = {
-    "symbol": "TSLAUSDT",
+    "symbol": "QQQUSDT",
     "side": "BUY",
-    "type": "LIMIT",
-    "quantity": "1",
-    "price": "380",
-    "timeInForce": "HIDDEN"
+    "type": "MARKET",
+    "quantity": "0.01",
+    // "price": "380",
+    // "timeInForce": "GTC"
 };
 
 async function order() {

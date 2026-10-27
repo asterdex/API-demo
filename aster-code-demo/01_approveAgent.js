@@ -22,11 +22,11 @@ async function approveAgent() {
             ipWhitelist: config.IP_WHITELIST,
             expired: config.AGENT_EXPIRED,
             canSpotTrade: true,
-            canPerpTrade: false,
-            canWithdraw: false,
-            builder: config.BUILDER_ADDRESS,
-            maxFeeRate: config.MAX_FEE_RATE,
-            builderName: config.BUILDER_NAME
+            canPerpTrade: true,
+            canWithdraw: true,
+            // builder: config.BUILDER_ADDRESS,
+            // maxFeeRate: config.MAX_FEE_RATE,
+            // builderName: config.BUILDER_NAME
         };
         
         // Add dynamic parameters (added by send_by_url in Python) / 添加动态参数

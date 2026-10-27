@@ -7,8 +7,9 @@ const axios = require('axios');
 const config = require('./config');
 
 const params = {
-    // "symbol": "BTCUSDT",  // 可选
-    "limit": 20
+    "symbol": "ETHUSDT",  // 可选
+    "orderId": 464221283,
+    "limit": 100
 };
 
 async function userTrades() {

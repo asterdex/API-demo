@@ -8,9 +8,9 @@ const config = require('./config');
 
 const params = {
     "asset": "USDT",
-    "amount": "100",
+    "amount": "1",
     "clientTranId": `transfer_${Date.now()}`, // 唯一的交易ID / Unique transaction ID
-    "kindType": "FUTURE_SPOT" // FUTURE_SPOT (期货转现货) 或 SPOT_FUTURE (现货转期货)
+    "kindType": "SPOT_FUTURE" // FUTURE_SPOT (期货转现货) 或 SPOT_FUTURE (现货转期货)
 };
 
 async function transfer() {

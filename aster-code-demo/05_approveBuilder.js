@@ -19,7 +19,7 @@ async function approveBuilder() {
         const params = {
             builder: config.BUILDER_ADDRESS,
             maxFeeRate: config.MAX_FEE_RATE,
-            builderName: 'ivan3'  // Match Python exactly
+            builderName: 'ross'  // Match Python exactly
         };
         
         // Add dynamic parameters (added by send_by_url in Python) / 添加动态参数

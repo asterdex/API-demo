@@ -17,7 +17,7 @@ async function deleteAgent() {
         
         // Build parameters (must match Python demo.py order) / 构建参数（必须与 Python demo.py 顺序一致）
         const params = {
-            agentAddress: config.SIGNER_ADDRESS
+            agentAddress: '0xe7c694cf0705b88c4414607aec0ce57a1363954c'
         };
         
         // Add dynamic parameters (added by send_by_url in Python) / 添加动态参数
